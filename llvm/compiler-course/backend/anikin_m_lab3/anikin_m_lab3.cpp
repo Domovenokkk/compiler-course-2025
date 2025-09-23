@@ -54,14 +54,14 @@ class X86LogicOptimizer : public MachineFunctionPass {
   }
 
   bool optimizeDistributiveLaw(MachineBasicBlock &MBB,
-                              MachineBasicBlock::iterator &It,
-                              const LogicOpChain &Chain) {
+                               MachineBasicBlock::iterator &It,
+                               const LogicOpChain &Chain) {
     return false;
   }
 
   bool optimizeCommonPatterns(MachineBasicBlock &MBB,
-                             MachineBasicBlock::iterator &It,
-                             const LogicOpChain &Chain) {
+                              MachineBasicBlock::iterator &It,
+                              const LogicOpChain &Chain) {
     MachineInstr &FirstMI = *Chain.FirstInstr;
     MachineInstr &SecondMI = *Chain.SecondInstr;
 
@@ -69,9 +69,11 @@ class X86LogicOptimizer : public MachineFunctionPass {
     Register FirstSrc2 = FirstMI.getOperand(2).getReg();
     Register SecondSrc2 = SecondMI.getOperand(2).getReg();
 
-    if ((Chain.FirstOpcode == X86::ANDPSrr || Chain.FirstOpcode == X86::PANDrr ||
+    if ((Chain.FirstOpcode == X86::ANDPSrr ||
+         Chain.FirstOpcode == X86::PANDrr ||
          Chain.FirstOpcode == X86::ANDPDrr) &&
-        (Chain.SecondOpcode == X86::ORPSrr || Chain.SecondOpcode == X86::PORrr ||
+        (Chain.SecondOpcode == X86::ORPSrr ||
+         Chain.SecondOpcode == X86::PORrr ||
          Chain.SecondOpcode == X86::ORPDrr)) {
 
       if (SecondSrc2 == FirstSrc1 || SecondSrc2 == FirstSrc2) {
@@ -83,7 +85,8 @@ class X86LogicOptimizer : public MachineFunctionPass {
       }
     }
 
-    if ((Chain.SecondOpcode == X86::ANDPSrr || Chain.SecondOpcode == X86::PANDrr ||
+    if ((Chain.SecondOpcode == X86::ANDPSrr ||
+         Chain.SecondOpcode == X86::PANDrr ||
          Chain.SecondOpcode == X86::ANDPDrr) &&
         (Chain.FirstOpcode == X86::ORPSrr || Chain.FirstOpcode == X86::PORrr ||
          Chain.FirstOpcode == X86::ORPDrr)) {
@@ -101,8 +104,8 @@ class X86LogicOptimizer : public MachineFunctionPass {
   }
 
   void mergeToAVXInstructions(MachineBasicBlock &MBB,
-                             MachineBasicBlock::iterator &It,
-                             const LogicOpChain &Chain) {
+                              MachineBasicBlock::iterator &It,
+                              const LogicOpChain &Chain) {
     MachineInstr &FirstMI = *Chain.FirstInstr;
     MachineInstr &SecondMI = *Chain.SecondInstr;
 
@@ -122,7 +125,7 @@ class X86LogicOptimizer : public MachineFunctionPass {
   }
 
   bool processInstruction(MachineBasicBlock &MBB,
-                         MachineBasicBlock::iterator &It) {
+                          MachineBasicBlock::iterator &It) {
     MachineInstr &CurrentMI = *It;
 
     if (!OpcodeMapping.count(CurrentMI.getOpcode()))
@@ -148,7 +151,7 @@ class X86LogicOptimizer : public MachineFunctionPass {
   }
 
   void upgradeSingleInstruction(MachineBasicBlock &MBB,
-                               MachineBasicBlock::iterator &It) {
+                                MachineBasicBlock::iterator &It) {
     MachineInstr &MI = *It;
     unsigned NewOpc = OpcodeMapping.lookup(MI.getOpcode());
 
@@ -196,10 +199,8 @@ public:
 };
 
 const DenseMap<unsigned, unsigned> X86LogicOptimizer::OpcodeMapping = {
-    {X86::PANDrr, X86::VPANDrr},
-    {X86::PORrr, X86::VPORrr},
-    {X86::PXORrr, X86::VPXORrr},
-    {X86::PANDNrr, X86::VPANDNrr},
+    {X86::PANDrr, X86::VPANDrr},  {X86::PORrr, X86::VPORrr},
+    {X86::PXORrr, X86::VPXORrr},  {X86::PANDNrr, X86::VPANDNrr},
 
     {X86::ANDPSrr, X86::VANDPSrr},
     {X86::ORPSrr, X86::VORPSrr},
