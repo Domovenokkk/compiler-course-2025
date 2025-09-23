@@ -199,8 +199,8 @@ public:
 };
 
 const DenseMap<unsigned, unsigned> X86LogicOptimizer::OpcodeMapping = {
-    {X86::PANDrr, X86::VPANDrr},  {X86::PORrr, X86::VPORrr},
-    {X86::PXORrr, X86::VPXORrr},  {X86::PANDNrr, X86::VPANDNrr},
+    {X86::PANDrr, X86::VPANDrr},   {X86::PORrr, X86::VPORrr},
+    {X86::PXORrr, X86::VPXORrr},   {X86::PANDNrr, X86::VPANDNrr},
 
     {X86::ANDPSrr, X86::VANDPSrr}, {X86::ORPSrr, X86::VORPSrr},
     {X86::XORPSrr, X86::VXORPSrr},
