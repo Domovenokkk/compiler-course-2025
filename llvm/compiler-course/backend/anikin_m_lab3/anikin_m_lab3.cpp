@@ -202,12 +202,10 @@ const DenseMap<unsigned, unsigned> X86LogicOptimizer::OpcodeMapping = {
     {X86::PANDrr, X86::VPANDrr},  {X86::PORrr, X86::VPORrr},
     {X86::PXORrr, X86::VPXORrr},  {X86::PANDNrr, X86::VPANDNrr},
 
-    {X86::ANDPSrr, X86::VANDPSrr},
-    {X86::ORPSrr, X86::VORPSrr},
+    {X86::ANDPSrr, X86::VANDPSrr}, {X86::ORPSrr, X86::VORPSrr},
     {X86::XORPSrr, X86::VXORPSrr},
 
-    {X86::ANDPDrr, X86::VANDPDrr},
-    {X86::ORPDrr, X86::VORPDrr},
+    {X86::ANDPDrr, X86::VANDPDrr}, {X86::ORPDrr, X86::VORPDrr},
     {X86::XORPDrr, X86::VXORPDrr},
 };
 
@@ -216,5 +214,5 @@ char X86LogicOptimizer::ID = 0;
 } // namespace
 
 static RegisterPass<X86LogicOptimizer>
-    Y("x86-logic-combine", "X86 Logical Operations Combination Optimizer", 
+    Y("x86-logic-combine", "X86 Logical Operations Combination Optimizer",
       false, false);
